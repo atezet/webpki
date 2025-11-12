@@ -452,7 +452,8 @@ impl<'a> FromDer<'a> for bool {
             Tag::Boolean,
             Error::TrailingData(Self::TYPE_ID),
             |input| match input.read_byte() {
-                Ok(0xff) => Ok(true),
+                Ok(0x01)  // non-conformant explicit encoding allowed for compat.
+                | Ok(0xff) => Ok(true),
                 Ok(0x00) => Ok(false),
                 _ => Err(Error::BadDer),
             },
